@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+// Leet code Q1
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
+struct ListNode* createNode(int val) {
+    struct ListNode* newNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+    newNode->val = val;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertNodeAtBeginning(struct ListNode** head, int val) {
+    struct ListNode* newNode = createNode(val);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+void printList(struct ListNode* head) {
+    struct ListNode* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->val);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+struct ListNode* removeElements(struct ListNode* head, int val){
+    // Handle where the first node or head must be removed
+    while (head!=NULL && head->val==val) {
+        struct ListNode* temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    struct ListNode* current = head;
+    while (current!=NULL && current->next!=NULL){
+        if (current->next->val==val){
+            struct ListNode* temp= current->next;
+            current->next=current->next->next;
+            free(temp);
+        }else{
+            current=current->next;
+        }
+    }
+    return head;
+}
+
+int main() {
+    struct ListNode* head = NULL;
+    insertNodeAtBeginning(&head,6);
+    insertNodeAtBeginning(&head,5);
+    insertNodeAtBeginning(&head,4);
+    insertNodeAtBeginning(&head,3);
+    insertNodeAtBeginning(&head,6);
+    insertNodeAtBeginning(&head,2);
+    insertNodeAtBeginning(&head,1);
+    
+    printf("Original list: ");
+    printList(head);
+
+    int val = 6;
+    head = removeElements(head, val);
+
+    printf("\nUpdated list after removing %d: ", val);
+    printList(head);
+
+    return 0;
+}
